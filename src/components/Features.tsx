@@ -1,24 +1,28 @@
 import { MessageCircle, Sparkles, Camera, Globe, Trophy, Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 
 const features = [
   {
     icon: MessageCircle,
     title: "Conversational AI Chef",
     description: "Get real-time voice and video feedback from your favorite celebrity chef. 'Arre, thoda oil kam karo beta!'",
-    color: "text-primary"
+    color: "text-primary",
+    link: "/ai-chef"
   },
   {
     icon: Sparkles,
     title: "Dadi's Wisdom",
     description: "Access traditional, regional healthy recipes passed down through generations. Authentic taste, healthier ingredients.",
-    color: "text-secondary"
+    color: "text-secondary",
+    link: "/dadi-wisdom"
   },
   {
     icon: Camera,
     title: "Oil Shame, Recipe Fame",
     description: "Upload your dish and watch as AI recreates it with healthier alternatives. Same taste, better health.",
-    color: "text-accent"
+    color: "text-accent",
+    link: "/oil-shame"
   },
   {
     icon: Globe,
@@ -41,6 +45,8 @@ const features = [
 ];
 
 const Features = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="py-24 relative">
       <div className="absolute inset-0 gradient-feature" />
@@ -62,8 +68,9 @@ const Features = () => {
           {features.map((feature, index) => (
             <Card 
               key={index}
-              className="border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-warm group"
+              className="border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-warm group cursor-pointer"
               style={{ animationDelay: `${index * 0.1}s` }}
+              onClick={() => feature.link && navigate(feature.link)}
             >
               <CardContent className="p-8 space-y-4">
                 <div className={`w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
