@@ -1,0 +1,87 @@
+import { MessageCircle, Sparkles, Camera, Globe, Trophy, Users } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+
+const features = [
+  {
+    icon: MessageCircle,
+    title: "Conversational AI Chef",
+    description: "Get real-time voice and video feedback from your favorite celebrity chef. 'Arre, thoda oil kam karo beta!'",
+    color: "text-primary"
+  },
+  {
+    icon: Sparkles,
+    title: "Dadi's Wisdom",
+    description: "Access traditional, regional healthy recipes passed down through generations. Authentic taste, healthier ingredients.",
+    color: "text-secondary"
+  },
+  {
+    icon: Camera,
+    title: "Oil Shame, Recipe Fame",
+    description: "Upload your dish and watch as AI recreates it with healthier alternatives. Same taste, better health.",
+    color: "text-accent"
+  },
+  {
+    icon: Globe,
+    title: "AR Cooking Mode",
+    description: "Experience holographic chef guidance right in your kitchen. Follow along step-by-step in augmented reality.",
+    color: "text-primary"
+  },
+  {
+    icon: Trophy,
+    title: "Regional Challenges",
+    description: "Join cooking competitions! Punjab vs Kerala vs Gujarat – who cooks the healthiest? Win badges and rewards.",
+    color: "text-secondary"
+  },
+  {
+    icon: Users,
+    title: "Community Kitchen",
+    description: "Share recipes, compete on leaderboards, and learn from fellow home chefs across India.",
+    color: "text-accent"
+  }
+];
+
+const Features = () => {
+  return (
+    <section className="py-24 relative">
+      <div className="absolute inset-0 gradient-feature" />
+      
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+          <h2 className="text-4xl lg:text-5xl font-display font-bold">
+            Everything You Need to Cook
+            <span className="block gradient-hero bg-clip-text text-transparent">
+              Healthy & Happy
+            </span>
+          </h2>
+          <p className="text-lg text-muted-foreground">
+            Powered by AI, inspired by tradition, designed for your wellness
+          </p>
+        </div>
+        
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((feature, index) => (
+            <Card 
+              key={index}
+              className="border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-warm group"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <CardContent className="p-8 space-y-4">
+                <div className={`w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
+                  <feature.icon className={`w-7 h-7 ${feature.color}`} />
+                </div>
+                <h3 className="text-xl font-display font-bold">
+                  {feature.title}
+                </h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  {feature.description}
+                </p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Features;
