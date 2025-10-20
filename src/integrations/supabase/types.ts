@@ -14,7 +14,120 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          preferred_language: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id: string
+          preferred_language?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          preferred_language?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      recipes: {
+        Row: {
+          category: string
+          cooking_time: number | null
+          created_at: string | null
+          description: string | null
+          difficulty: string | null
+          id: string
+          image_url: string | null
+          ingredients: Json
+          instructions: Json
+          is_low_oil: boolean | null
+          region: string
+          title: string
+        }
+        Insert: {
+          category: string
+          cooking_time?: number | null
+          created_at?: string | null
+          description?: string | null
+          difficulty?: string | null
+          id?: string
+          image_url?: string | null
+          ingredients: Json
+          instructions: Json
+          is_low_oil?: boolean | null
+          region: string
+          title: string
+        }
+        Update: {
+          category?: string
+          cooking_time?: number | null
+          created_at?: string | null
+          description?: string | null
+          difficulty?: string | null
+          id?: string
+          image_url?: string | null
+          ingredients?: Json
+          instructions?: Json
+          is_low_oil?: boolean | null
+          region?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      user_dishes: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          healthier_image_url: string | null
+          id: string
+          original_image_url: string
+          status: string | null
+          title: string
+          user_id: string
+          votes_healthier: number | null
+          votes_original: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          healthier_image_url?: string | null
+          id?: string
+          original_image_url: string
+          status?: string | null
+          title: string
+          user_id: string
+          votes_healthier?: number | null
+          votes_original?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          healthier_image_url?: string | null
+          id?: string
+          original_image_url?: string
+          status?: string | null
+          title?: string
+          user_id?: string
+          votes_healthier?: number | null
+          votes_original?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
