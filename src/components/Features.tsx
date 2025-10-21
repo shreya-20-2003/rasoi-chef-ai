@@ -27,14 +27,16 @@ const features = [
   {
     icon: Globe,
     title: "AR Cooking Mode",
-    description: "Experience holographic chef guidance right in your kitchen. Follow along step-by-step in augmented reality.",
-    color: "text-primary"
+    description: "Turn your kitchen into a live classroom with Augmented Reality Cooking. Point your camera at ingredients to see a holographic chef demonstrating low-oil techniques right in your kitchen, step by step.",
+    color: "text-primary",
+    link: "/auth"
   },
   {
     icon: Trophy,
     title: "Regional Challenges",
-    description: "Join cooking competitions! Punjab vs Kerala vs Gujarat – who cooks the healthiest? Win badges and rewards.",
-    color: "text-secondary"
+    description: "Join the Rasoi AI State Challenge — Punjab vs Kerala vs Gujarat, and see which region can cook the healthiest without losing its authentic flavors! Compete in weekly challenges where your dishes are rated by AI for oil usage, creativity, and presentation. Track your rank on state-wise leaderboards, unlock achievements like 'Masala Master' and 'Healthy Rasoi Star', and represent your culture with pride in the Swasth Bharat leaderboard.",
+    color: "text-secondary",
+    link: "/auth"
   },
   {
     icon: Users,

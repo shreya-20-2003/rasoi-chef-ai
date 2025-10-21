@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=OpenDyslexic&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -147,4 +149,29 @@ All colors MUST be HSL.
   .animate-pulse-slow {
     animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
+}
+
+/* Accessibility Features */
+.dyslexia-font * {
+  font-family: 'OpenDyslexic', sans-serif !important;
+}
+
+.high-contrast {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --card: 0 0% 10%;
+  --card-foreground: 0 0% 100%;
+  --primary: 48 96% 60%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 142 76% 50%;
+  --secondary-foreground: 0 0% 0%;
+  --muted: 0 0% 20%;
+  --muted-foreground: 0 0% 90%;
+  --accent: 14 91% 60%;
+  --accent-foreground: 0 0% 0%;
+  --border: 0 0% 100%;
+}
+
+.high-contrast * {
+  border-color: hsl(var(--border)) !important;
 }

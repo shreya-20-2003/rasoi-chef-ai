@@ -4,6 +4,7 @@ import Demo from "@/components/Demo";
 import Community from "@/components/Community";
 import Footer from "@/components/Footer";
 import FloatingChat from "@/components/FloatingChat";
+import AccessibilitySettings from "@/components/AccessibilitySettings";
 
 const Index = () => {
   return (
@@ -14,6 +15,7 @@ const Index = () => {
       <Community />
       <Footer />
       <FloatingChat />
+      <AccessibilitySettings />
     </div>
   );
 };
