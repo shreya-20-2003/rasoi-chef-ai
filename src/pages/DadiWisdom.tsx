@@ -3,10 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Clock, ChefHat, MapPin } from "lucide-react";
+import { ArrowLeft, Clock, ChefHat, MapPin, Flame, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
 
 interface Recipe {
   id: string;
@@ -28,6 +36,8 @@ const DadiWisdom = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const regions = ["all", "Pan-India", "North India", "South India", "Gujarat"];
 
@@ -76,6 +86,11 @@ const DadiWisdom = () => {
   const filteredRecipes = selectedRegion === "all" 
     ? recipes 
     : recipes.filter(r => r.region === selectedRegion);
+
+  const handleViewRecipe = (recipe: Recipe) => {
+    setSelectedRecipe(recipe);
+    setIsDialogOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -169,7 +184,11 @@ const DadiWisdom = () => {
                       </ul>
                     </div>
 
-                    <Button className="w-full" variant="outline">
+                    <Button 
+                      className="w-full" 
+                      variant="outline"
+                      onClick={() => handleViewRecipe(recipe)}
+                    >
                       View Full Recipe
                     </Button>
                   </CardContent>
@@ -185,6 +204,115 @@ const DadiWisdom = () => {
           )}
         </div>
       </main>
+
+      {/* Recipe Details Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-card">
+          {selectedRecipe && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-3xl font-display">
+                  {selectedRecipe.title}
+                </DialogTitle>
+                <DialogDescription className="text-base">
+                  {selectedRecipe.description}
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="space-y-6 pt-4">
+                {/* Recipe Info Chart */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="bg-primary/5 p-4 rounded-lg border-2 border-primary/20">
+                    <div className="flex items-center gap-2 text-primary mb-1">
+                      <Clock className="w-4 h-4" />
+                      <span className="text-xs font-medium uppercase">Time</span>
+                    </div>
+                    <p className="text-xl font-bold">{selectedRecipe.cooking_time} mins</p>
+                  </div>
+
+                  <div className="bg-secondary/5 p-4 rounded-lg border-2 border-secondary/20">
+                    <div className="flex items-center gap-2 text-secondary mb-1">
+                      <ChefHat className="w-4 h-4" />
+                      <span className="text-xs font-medium uppercase">Level</span>
+                    </div>
+                    <p className="text-xl font-bold capitalize">{selectedRecipe.difficulty}</p>
+                  </div>
+
+                  <div className="bg-accent/5 p-4 rounded-lg border-2 border-accent/20">
+                    <div className="flex items-center gap-2 text-accent mb-1">
+                      <MapPin className="w-4 h-4" />
+                      <span className="text-xs font-medium uppercase">Region</span>
+                    </div>
+                    <p className="text-xl font-bold">{selectedRecipe.region}</p>
+                  </div>
+
+                  <div className="bg-green-50 dark:bg-green-950 p-4 rounded-lg border-2 border-green-200 dark:border-green-800">
+                    <div className="flex items-center gap-2 text-green-600 dark:text-green-400 mb-1">
+                      <Flame className="w-4 h-4" />
+                      <span className="text-xs font-medium uppercase">Oil</span>
+                    </div>
+                    <p className="text-xl font-bold">
+                      {selectedRecipe.is_low_oil ? "Low" : "Normal"}
+                    </p>
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Ingredients Section */}
+                <div className="space-y-3">
+                  <h3 className="text-xl font-display font-bold flex items-center gap-2">
+                    <Users className="w-5 h-5 text-primary" />
+                    Ingredients
+                  </h3>
+                  <div className="bg-muted/30 p-4 rounded-lg">
+                    <ul className="grid md:grid-cols-2 gap-2">
+                      {Array.isArray(selectedRecipe.ingredients) && selectedRecipe.ingredients.map((ing: string, i: number) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <span className="text-primary font-bold mt-1">•</span>
+                          <span>{ing}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Instructions Section */}
+                <div className="space-y-3">
+                  <h3 className="text-xl font-display font-bold flex items-center gap-2">
+                    <ChefHat className="w-5 h-5 text-primary" />
+                    Instructions
+                  </h3>
+                  <div className="space-y-3">
+                    {Array.isArray(selectedRecipe.instructions) && selectedRecipe.instructions.map((step: string, i: number) => (
+                      <div key={i} className="flex gap-4">
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold text-sm">
+                          {i + 1}
+                        </div>
+                        <p className="flex-1 pt-1">{step}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Category Badge */}
+                <div className="flex flex-wrap gap-2 pt-4">
+                  <Badge variant="outline" className="text-sm">
+                    {selectedRecipe.category}
+                  </Badge>
+                  {selectedRecipe.is_low_oil && (
+                    <Badge className="bg-green-100 text-green-800 hover:bg-green-200">
+                      Healthy Choice
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
