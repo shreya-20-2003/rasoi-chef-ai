@@ -70,13 +70,13 @@ const Features = () => {
           {features.map((feature, index) => (
             <Card 
               key={index}
-              className="border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-warm group cursor-pointer"
+              className="border-2 border-primary/20 hover:border-primary transition-all duration-300 hover:shadow-warm hover:-translate-y-2 group cursor-pointer bg-gradient-to-br from-card via-card to-primary/5"
               style={{ animationDelay: `${index * 0.1}s` }}
               onClick={() => feature.link && navigate(feature.link)}
             >
               <CardContent className="p-8 space-y-4">
-                <div className={`w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-                  <feature.icon className={`w-7 h-7 ${feature.color}`} />
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center group-hover:scale-110 group-hover:shadow-glow transition-all duration-300`}>
+                  <feature.icon className={`w-8 h-8 ${feature.color}`} />
                 </div>
                 <h3 className="text-xl font-display font-bold">
                   {feature.title}

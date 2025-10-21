@@ -2,7 +2,7 @@ import { Heart, Mail, Phone, MapPin } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="relative bg-gradient-to-br from-muted/30 to-background border-t">
+    <footer className="relative bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 border-t-2 border-primary/20">
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZjk5MzMiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djItaDJ2LTJoLTJ6bTAgNHYyaDJ2LTJoLTJ6bS0yLTJ2Mmgydi0yaC0yem0wIDR2Mmgydi0yaC0yem0tMi00djJoMnYtMmgtMnptMCA0djJoMnYtMmgtMnptLTItNHYyaDJ2LTJoLTJ6bTAgNHYyaDJ2LTJoLTJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-50" />
       
       <div className="container mx-auto px-6 py-12 relative z-10">
@@ -15,10 +15,12 @@ const Footer = () => {
               Bringing celebrity chefs to your kitchen through AI. Cook healthy, live happy.
             </p>
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
-                <Heart className="w-4 h-4 text-primary" />
+              <div className="w-10 h-10 bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl flex items-center justify-center shadow-sm">
+                <Heart className="w-5 h-5 text-primary" />
               </div>
-              <span className="text-sm font-medium">Swasth Bharat Initiative</span>
+              <span className="text-sm font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                Swasth Bharat Initiative
+              </span>
             </div>
           </div>
           

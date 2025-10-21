@@ -1,13 +1,13 @@
 import { Settings, Moon, Sun, Type, Contrast, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import {
@@ -50,102 +50,90 @@ const AccessibilitySettings = () => {
 
   const languages = [
     { value: 'en', label: 'English' },
-    { value: 'hi', label: 'हिंदी (Hindi)' },
-    { value: 'pa', label: 'ਪੰਜਾਬੀ (Punjabi)' },
-    { value: 'gu', label: 'ગુજરાતી (Gujarati)' },
-    { value: 'ml', label: 'മലയാളം (Malayalam)' },
-    { value: 'ta', label: 'தமிழ் (Tamil)' },
-    { value: 'te', label: 'తెలుగు (Telugu)' },
-    { value: 'bn', label: 'বাংলা (Bengali)' },
-    { value: 'mr', label: 'मराठी (Marathi)' },
+    { value: 'hi', label: 'हिंदी' },
+    { value: 'pa', label: 'ਪੰਜਾਬੀ' },
+    { value: 'gu', label: 'ગુજરાતી' },
+    { value: 'ml', label: 'മലയാളം' },
+    { value: 'ta', label: 'தமிழ்' },
+    { value: 'te', label: 'తెలుగు' },
+    { value: 'bn', label: 'বাংলা' },
+    { value: 'mr', label: 'मराठी' },
   ];
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon"
-          className="fixed bottom-24 right-6 h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all z-50"
+          className="relative"
         >
-          <Settings className="h-6 w-6" />
+          <Settings className="h-5 w-5" />
         </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Settings & Accessibility</DialogTitle>
-          <DialogDescription>
-            Customize your experience with accessibility features
-          </DialogDescription>
-        </DialogHeader>
-        <div className="space-y-6 py-4">
-          {/* Dark Mode */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              {theme === 'dark' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-              <Label htmlFor="dark-mode" className="cursor-pointer">
-                Dark Mode
-              </Label>
-            </div>
-            <Switch
-              id="dark-mode"
-              checked={theme === 'dark'}
-              onCheckedChange={toggleTheme}
-            />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-64">
+        <DropdownMenuLabel>Settings & Accessibility</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        
+        {/* Dark Mode */}
+        <DropdownMenuItem className="flex items-center justify-between p-3" onSelect={(e) => e.preventDefault()}>
+          <div className="flex items-center gap-2">
+            {theme === 'dark' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+            <span className="text-sm">Dark Mode</span>
           </div>
+          <Switch
+            checked={theme === 'dark'}
+            onCheckedChange={toggleTheme}
+          />
+        </DropdownMenuItem>
 
-          {/* Dyslexia Font */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Type className="h-5 w-5" />
-              <Label htmlFor="dyslexia-font" className="cursor-pointer">
-                Dyslexia-Friendly Font
-              </Label>
-            </div>
-            <Switch
-              id="dyslexia-font"
-              checked={isDyslexiaFont}
-              onCheckedChange={toggleDyslexiaFont}
-            />
+        {/* Dyslexia Font */}
+        <DropdownMenuItem className="flex items-center justify-between p-3" onSelect={(e) => e.preventDefault()}>
+          <div className="flex items-center gap-2">
+            <Type className="h-4 w-4" />
+            <span className="text-sm">Dyslexia Font</span>
           </div>
+          <Switch
+            checked={isDyslexiaFont}
+            onCheckedChange={toggleDyslexiaFont}
+          />
+        </DropdownMenuItem>
 
-          {/* High Contrast */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Contrast className="h-5 w-5" />
-              <Label htmlFor="high-contrast" className="cursor-pointer">
-                High Contrast Mode
-              </Label>
-            </div>
-            <Switch
-              id="high-contrast"
-              checked={isHighContrast}
-              onCheckedChange={toggleHighContrast}
-            />
+        {/* High Contrast */}
+        <DropdownMenuItem className="flex items-center justify-between p-3" onSelect={(e) => e.preventDefault()}>
+          <div className="flex items-center gap-2">
+            <Contrast className="h-4 w-4" />
+            <span className="text-sm">High Contrast</span>
           </div>
+          <Switch
+            checked={isHighContrast}
+            onCheckedChange={toggleHighContrast}
+          />
+        </DropdownMenuItem>
 
-          {/* Language Selection */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              <Languages className="h-5 w-5" />
-              <Label>Language</Label>
-            </div>
-            <Select value={language} onValueChange={setLanguage}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select language" />
-              </SelectTrigger>
-              <SelectContent>
-                {languages.map((lang) => (
-                  <SelectItem key={lang.value} value={lang.value}>
-                    {lang.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+        <DropdownMenuSeparator />
+        
+        {/* Language Selection */}
+        <div className="p-3">
+          <div className="flex items-center gap-2 mb-2">
+            <Languages className="h-4 w-4" />
+            <Label className="text-sm font-medium">Language</Label>
           </div>
+          <Select value={language} onValueChange={setLanguage}>
+            <SelectTrigger className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {languages.map((lang) => (
+                <SelectItem key={lang.value} value={lang.value}>
+                  {lang.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
-      </DialogContent>
-    </Dialog>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
