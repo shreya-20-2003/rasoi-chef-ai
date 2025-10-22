@@ -1,18 +1,44 @@
-import { useState } from "react";
-import { Menu, X, ChefHat } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, X, ChefHat, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { User as SupabaseUser } from "@supabase/supabase-js";
 import AccessibilitySettings from "./AccessibilitySettings";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate("/");
+  };
 
   const navItems = [
     { name: "Home", href: "/" },
     { name: "AI Chef", href: "/ai-chef" },
     { name: "Dadi's Wisdom", href: "/dadi-wisdom" },
     { name: "Oil Shame", href: "/oil-shame" },
-    { name: "Community", href: "#community" },
   ];
 
   return (
@@ -24,9 +50,12 @@ const Header = () => {
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg group-hover:shadow-warm transition-all group-hover:scale-105">
               <ChefHat className="w-6 h-6 text-white" />
             </div>
-            <span className="text-2xl font-display font-bold gradient-hero bg-clip-text text-transparent">
-              Rasoi AI
-            </span>
+            <div>
+              <span className="text-xl font-display font-bold gradient-hero bg-clip-text text-transparent block">
+                CookGPT
+              </span>
+              <span className="text-[10px] text-muted-foreground hidden sm:block">Your AI Chef with an Indian Accent</span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -46,14 +75,32 @@ const Header = () => {
           <div className="flex items-center gap-3">
             <AccessibilitySettings />
             
-            <Link to="/auth">
-              <Button 
-                variant="default" 
-                className="hidden md:inline-flex shadow-warm hover:shadow-lg transition-all"
-              >
-                Get Started
-              </Button>
-            </Link>
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon" className="rounded-full hidden md:flex">
+                    <User className="w-5 h-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => navigate("/oil-shame")}>
+                    My Dishes
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link to="/auth">
+                <Button 
+                  variant="default" 
+                  className="hidden md:inline-flex shadow-warm hover:shadow-lg transition-all"
+                >
+                  Get Started
+                </Button>
+              </Link>
+            )}
 
             {/* Mobile Menu Button */}
             <Button
@@ -85,11 +132,36 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
-              <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
-                <Button className="w-full mt-2 shadow-warm">
-                  Get Started
-                </Button>
-              </Link>
+              {user ? (
+                <div className="space-y-2 mt-2">
+                  <Button 
+                    variant="outline" 
+                    className="w-full" 
+                    onClick={() => {
+                      navigate("/oil-shame");
+                      setIsMenuOpen(false);
+                    }}
+                  >
+                    My Dishes
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full" 
+                    onClick={() => {
+                      handleSignOut();
+                      setIsMenuOpen(false);
+                    }}
+                  >
+                    Sign Out
+                  </Button>
+                </div>
+              ) : (
+                <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                  <Button className="w-full mt-2 shadow-warm">
+                    Get Started
+                  </Button>
+                </Link>
+              )}
             </nav>
           </div>
         )}

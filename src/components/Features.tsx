@@ -6,7 +6,7 @@ const features = [
   {
     icon: MessageCircle,
     title: "Conversational AI Chef",
-    description: "Get real-time voice and video feedback from your favorite celebrity chef. 'Arre, thoda oil kam karo beta!'",
+    description: "Get real-time voice and video feedback from your AI chef. 'Arre, thoda oil kam karo beta!'",
     color: "text-primary",
     link: "/ai-chef"
   },
@@ -23,26 +23,6 @@ const features = [
     description: "Upload your dish and watch as AI recreates it with healthier alternatives. Same taste, better health.",
     color: "text-accent",
     link: "/oil-shame"
-  },
-  {
-    icon: Globe,
-    title: "AR Cooking Mode",
-    description: "Turn your kitchen into a live classroom with Augmented Reality Cooking. Point your camera at ingredients to see a holographic chef demonstrating low-oil techniques right in your kitchen, step by step.",
-    color: "text-primary",
-    link: "/auth"
-  },
-  {
-    icon: Trophy,
-    title: "Regional Challenges",
-    description: "Join the Rasoi AI State Challenge — Punjab vs Kerala vs Gujarat, and see which region can cook the healthiest without losing its authentic flavors! Compete in weekly challenges where your dishes are rated by AI for oil usage, creativity, and presentation. Track your rank on state-wise leaderboards, unlock achievements like 'Masala Master' and 'Healthy Rasoi Star', and represent your culture with pride in the Swasth Bharat leaderboard.",
-    color: "text-secondary",
-    link: "/auth"
-  },
-  {
-    icon: Users,
-    title: "Community Kitchen",
-    description: "Share recipes, compete on leaderboards, and learn from fellow home chefs across India.",
-    color: "text-accent"
   }
 ];
 

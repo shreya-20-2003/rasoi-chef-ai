@@ -60,31 +60,49 @@ const OilShame = () => {
     setLoading(true);
 
     try {
-      // This is a simplified version - actual implementation would:
-      // 1. Upload image to storage
-      // 2. Call AI to generate healthier version
-      // 3. Save to database
+      // Upload image to storage first
+      const fileExt = imageFile.name.split('.').pop();
+      const fileName = `${user.id}_${Date.now()}.${fileExt}`;
+      const filePath = `dishes/${fileName}`;
 
-      toast({
-        title: "Coming Soon!",
-        description: "AI image recreation feature is being integrated. Your dish will be transformed into a healthier version soon!",
-      });
+      const { error: uploadError } = await supabase.storage
+        .from('user_dishes')
+        .upload(filePath, imageFile);
 
-      // Demo: Insert placeholder entry
-      const { error } = await supabase.from("user_dishes").insert({
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('user_dishes')
+        .getPublicUrl(filePath);
+
+      // Call AI to generate healthier version
+      const { data: aiData, error: aiError } = await supabase.functions.invoke(
+        'generate-healthy-dish',
+        {
+          body: {
+            dishDescription: `${title}. ${description}`,
+            originalImageUrl: publicUrl
+          }
+        }
+      );
+
+      if (aiError) throw aiError;
+
+      // Save to database
+      const { error: dbError } = await supabase.from("user_dishes").insert({
         user_id: user.id,
         title,
         description,
-        original_image_url: "placeholder",
-        healthier_image_url: null,
-        status: "pending",
+        original_image_url: publicUrl,
+        healthier_image_url: aiData.imageUrl,
+        status: "completed",
       });
 
-      if (error) throw error;
+      if (dbError) throw dbError;
 
       toast({
         title: "Success!",
-        description: "Your dish has been submitted for healthy recreation.",
+        description: "Your dish has been transformed into a healthier version!",
       });
 
       // Reset form
@@ -93,9 +111,10 @@ const OilShame = () => {
       setImageFile(null);
       setImagePreview("");
     } catch (error: any) {
+      console.error("Error:", error);
       toast({
         title: "Error",
-        description: error.message,
+        description: error.message || "Failed to transform your dish. Please try again.",
         variant: "destructive",
       });
     } finally {

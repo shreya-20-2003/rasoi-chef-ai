@@ -9,10 +9,10 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div className="space-y-4">
             <h3 className="text-2xl font-display font-bold gradient-hero bg-clip-text text-transparent">
-              Rasoi AI
+              CookGPT
             </h3>
             <p className="text-sm text-muted-foreground">
-              Bringing celebrity chefs to your kitchen through AI. Cook healthy, live happy.
+              Your AI Chef with an Indian Accent. Cook healthy, live happy.
             </p>
             <div className="flex items-center gap-2">
               <div className="w-10 h-10 bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl flex items-center justify-center shadow-sm">
@@ -27,11 +27,11 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Features</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li className="hover:text-primary cursor-pointer transition-colors">AI Chef Avatar</li>
+              <li className="hover:text-primary cursor-pointer transition-colors">AI Chef</li>
               <li className="hover:text-primary cursor-pointer transition-colors">Voice Guidance</li>
-              <li className="hover:text-primary cursor-pointer transition-colors">AR Cooking</li>
+              <li className="hover:text-primary cursor-pointer transition-colors">Dadi's Wisdom</li>
               <li className="hover:text-primary cursor-pointer transition-colors">Recipe Library</li>
-              <li className="hover:text-primary cursor-pointer transition-colors">Community</li>
+              <li className="hover:text-primary cursor-pointer transition-colors">Oil Shame</li>
             </ul>
           </div>
           
@@ -51,7 +51,7 @@ const Footer = () => {
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-primary" />
-                hello@rasoiai.com
+                hello@cookgpt.ai
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-primary" />
@@ -67,7 +67,7 @@ const Footer = () => {
         
         <div className="border-t pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © 2025 Rasoi AI. Made with <Heart className="w-4 h-4 inline text-primary" /> for Swasth Bharat
+            © 2025 CookGPT. Made with <Heart className="w-4 h-4 inline text-primary" /> for Swasth Bharat
           </p>
           <div className="flex gap-6 text-sm text-muted-foreground">
             <a href="#" className="hover:text-primary transition-colors">Privacy Policy</a>

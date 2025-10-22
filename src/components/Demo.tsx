@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Mic, Video, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Demo = () => {
+  const navigate = useNavigate();
+  
   return (
     <section className="py-24 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-secondary/5" />
@@ -24,7 +27,7 @@ const Demo = () => {
             </h2>
             
             <p className="text-lg text-muted-foreground">
-              Watch how Rasoi AI transforms your cooking experience with real-time guidance, 
+              Watch how CookGPT transforms your cooking experience with real-time guidance, 
               personalized feedback, and traditional wisdom at your fingertips.
             </p>
             
@@ -60,7 +63,7 @@ const Demo = () => {
               </div>
             </div>
             
-            <Button size="lg" className="shadow-warm">
+            <Button size="lg" className="shadow-warm" onClick={() => navigate("/ai-chef")}>
               Watch Full Demo
             </Button>
           </div>
@@ -73,7 +76,7 @@ const Demo = () => {
                   <Video className="w-10 h-10 text-primary" />
                 </div>
                 <p className="font-display text-2xl font-bold">Interactive Demo</p>
-                <p className="text-muted-foreground">Click to experience Rasoi AI</p>
+                <p className="text-muted-foreground">Click to experience CookGPT</p>
               </div>
               
               <div className="absolute bottom-4 left-4 right-4 bg-card/95 backdrop-blur-sm rounded-xl p-3 animate-fade-in">

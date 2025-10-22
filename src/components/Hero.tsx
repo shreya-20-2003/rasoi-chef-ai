@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Play } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-cooking.jpg";
 
 const Hero = () => {
+  const navigate = useNavigate();
+  
   return (
     <section className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden pt-16">
       <div className="absolute inset-0 gradient-hero opacity-15" />
@@ -20,9 +23,9 @@ const Hero = () => {
             </div>
             
             <h1 className="text-5xl lg:text-7xl font-display font-bold leading-tight">
-              Your Celebrity Chef,
+              Your AI Chef with
               <span className="block gradient-hero bg-clip-text text-transparent">
-                Your Rasoi Partner
+                an Indian Accent
               </span>
             </h1>
             
@@ -32,10 +35,19 @@ const Hero = () => {
             </p>
             
             <div className="flex flex-wrap gap-4">
-              <Button size="lg" className="shadow-warm hover:shadow-glow text-lg px-8 bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_100%] hover:bg-right transition-all duration-500">
-                Try Rasoi AI
+              <Button 
+                size="lg" 
+                className="shadow-warm hover:shadow-glow text-lg px-8 bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_100%] hover:bg-right transition-all duration-500"
+                onClick={() => navigate("/ai-chef")}
+              >
+                Try CookGPT
               </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8 border-2 border-primary/30 hover:border-primary hover:bg-primary/5">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="text-lg px-8 border-2 border-primary/30 hover:border-primary hover:bg-primary/5"
+                onClick={() => navigate("/ai-chef")}
+              >
                 <Play className="w-5 h-5 mr-2" />
                 Watch Demo
               </Button>

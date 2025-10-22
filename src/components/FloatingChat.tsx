@@ -1,10 +1,53 @@
 import { useState } from "react";
-import { MessageCircle, X } from "lucide-react";
+import { MessageCircle, X, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const FloatingChat = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState<Array<{ role: string; content: string }>>([
+    {
+      role: "assistant",
+      content: "Namaste beta! 🙏 Kya pakayein aaj? What would you like to cook today?"
+    },
+    {
+      role: "assistant",
+      content: "I can help you with:\n• Healthy recipe suggestions\n• Step-by-step cooking guidance\n• Ingredient substitutions\n• Regional specialties"
+    }
+  ]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleSend = async () => {
+    if (!message.trim() || isLoading) return;
+
+    const userMessage = message.trim();
+    setMessage("");
+    setMessages(prev => [...prev, { role: "user", content: userMessage }]);
+    setIsLoading(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("chat-recipe", {
+        body: { message: userMessage }
+      });
+
+      if (error) throw error;
+
+      setMessages(prev => [...prev, { role: "assistant", content: data.reply }]);
+    } catch (error: any) {
+      console.error("Chat error:", error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to get response. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -46,26 +89,19 @@ const FloatingChat = () => {
           </div>
 
           <div className="flex-1 p-4 space-y-4 overflow-y-auto bg-muted/20">
-            <div className="bg-card rounded-2xl rounded-tl-none p-4 shadow-sm max-w-[80%]">
-              <p className="text-sm">
-                Namaste beta! 🙏 Kya pakayein aaj?
-              </p>
-              <p className="text-xs text-muted-foreground mt-2">
-                What would you like to cook today?
-              </p>
-            </div>
-
-            <div className="bg-card rounded-2xl rounded-tl-none p-4 shadow-sm max-w-[80%]">
-              <p className="text-sm">
-                I can help you with:
-              </p>
-              <ul className="text-xs text-muted-foreground mt-2 space-y-1">
-                <li>• Healthy recipe suggestions</li>
-                <li>• Step-by-step cooking guidance</li>
-                <li>• Ingredient substitutions</li>
-                <li>• Regional specialties</li>
-              </ul>
-            </div>
+            {messages.map((msg, index) => (
+              <div 
+                key={index}
+                className={`${msg.role === 'user' ? 'ml-auto bg-primary text-primary-foreground' : 'bg-card'} rounded-2xl ${msg.role === 'user' ? 'rounded-tr-none' : 'rounded-tl-none'} p-4 shadow-sm max-w-[80%] ${msg.role === 'user' ? 'ml-auto' : ''}`}
+              >
+                <p className="text-sm whitespace-pre-line">{msg.content}</p>
+              </div>
+            ))}
+            {isLoading && (
+              <div className="bg-card rounded-2xl rounded-tl-none p-4 shadow-sm max-w-[80%]">
+                <p className="text-sm text-muted-foreground">Chef is thinking...</p>
+              </div>
+            )}
           </div>
 
           <div className="p-4 border-t">
@@ -73,10 +109,19 @@ const FloatingChat = () => {
               <input
                 type="text"
                 placeholder="Type your message..."
-                className="flex-1 px-4 py-2 rounded-full bg-muted text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                disabled={isLoading}
+                className="flex-1 px-4 py-2 rounded-full bg-muted text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
               />
-              <Button size="sm" className="rounded-full px-6">
-                Send
+              <Button 
+                size="sm" 
+                className="rounded-full px-4"
+                onClick={handleSend}
+                disabled={isLoading || !message.trim()}
+              >
+                <Send className="w-4 h-4" />
               </Button>
             </div>
           </div>
