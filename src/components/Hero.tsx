@@ -22,14 +22,18 @@ const Hero = () => {
               </span>
             </div>
             
-            <h1 className="text-5xl lg:text-7xl font-display font-bold leading-tight">
-              Your AI Chef with
-              <span className="block gradient-hero bg-clip-text text-transparent">
-                an Indian Accent
+            <h1 className="text-5xl lg:text-7xl font-display font-bold leading-tight text-foreground">
+              CookGPT
+              <span className="block text-primary">
+                Your AI Chef with an Indian Accent
               </span>
             </h1>
             
-            <p className="text-lg lg:text-xl text-muted-foreground max-w-xl">
+            <p className="text-lg lg:text-xl text-foreground/80 max-w-xl font-medium">
+              Healthy & Happy AI-Powered Cooking
+            </p>
+            
+            <p className="text-base lg:text-lg text-muted-foreground max-w-xl">
               Learn, cook, and feel the joy of healthy Indian cooking with your favorite AI chef. 
               Experience the warmth of traditional wisdom meets cutting-edge technology.
             </p>
