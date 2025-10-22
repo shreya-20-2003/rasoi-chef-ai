@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="container mx-auto px-6 py-12 relative z-10">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div className="space-y-4">
-            <h3 className="text-2xl font-display font-bold gradient-hero bg-clip-text text-transparent">
+            <h3 className="text-2xl font-display font-bold text-primary">
               CookGPT
             </h3>
             <p className="text-sm text-muted-foreground">

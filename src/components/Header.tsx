@@ -51,7 +51,7 @@ const Header = () => {
               <ChefHat className="w-6 h-6 text-white" />
             </div>
             <div>
-              <span className="text-xl font-display font-bold gradient-hero bg-clip-text text-transparent block">
+              <span className="text-xl font-display font-bold text-primary block">
                 CookGPT
               </span>
               <span className="text-[10px] text-muted-foreground hidden sm:block">Your AI Chef with an Indian Accent</span>
