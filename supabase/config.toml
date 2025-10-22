@@ -1,1 +1,7 @@
 project_id = "eadhzgvzftpzdxodqviz"
+
+[functions.generate-healthy-dish]
+verify_jwt = false
+
+[functions.chat-recipe]
+verify_jwt = false
