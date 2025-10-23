@@ -30,7 +30,7 @@ const Hero = () => {
             </h1>
             
             <p className="text-lg lg:text-xl text-foreground/80 max-w-xl font-medium">
-              Healthy & Happy AI-Powered Cooking
+              Experience the Magic of AI-Powered Cooking
             </p>
             
             <p className="text-base lg:text-lg text-muted-foreground max-w-xl">
