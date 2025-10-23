@@ -64,8 +64,46 @@ serve(async (req) => {
       throw new Error("No image generated");
     }
 
+    // Now generate the recipe using AI
+    const recipePrompt = `Create a detailed, healthy oil-free recipe for this Indian dish: ${dishDescription}.
+    Include:
+    - List of ingredients with quantities
+    - Step-by-step cooking instructions
+    - Cooking time and servings
+    - Tips for making it healthier without oil
+    Keep it authentic to Indian cuisine but focus on healthy cooking methods.`;
+
+    const recipeResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash",
+        messages: [
+          {
+            role: "user",
+            content: recipePrompt,
+          },
+        ],
+      }),
+    });
+
+    if (!recipeResponse.ok) {
+      console.error("Failed to generate recipe:", await recipeResponse.text());
+      // Return image without recipe if recipe generation fails
+      return new Response(
+        JSON.stringify({ imageUrl: generatedImageUrl, recipe: null }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const recipeData = await recipeResponse.json();
+    const recipe = recipeData.choices?.[0]?.message?.content;
+
     return new Response(
-      JSON.stringify({ imageUrl: generatedImageUrl }),
+      JSON.stringify({ imageUrl: generatedImageUrl, recipe }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (e) {

@@ -19,6 +19,8 @@ const OilShame = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState("");
   const [loading, setLoading] = useState(false);
+  const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+  const [generatedRecipe, setGeneratedRecipe] = useState<string | null>(null);
 
   useEffect(() => {
     // Check authentication
@@ -100,16 +102,14 @@ const OilShame = () => {
 
       if (dbError) throw dbError;
 
+      // Set the generated results for display
+      setGeneratedImage(aiData.imageUrl);
+      setGeneratedRecipe(aiData.recipe);
+
       toast({
         title: "Success!",
         description: "Your dish has been transformed into a healthier version!",
       });
-
-      // Reset form
-      setTitle("");
-      setDescription("");
-      setImageFile(null);
-      setImagePreview("");
     } catch (error: any) {
       console.error("Error:", error);
       toast({
@@ -235,16 +235,71 @@ const OilShame = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-primary/5 to-secondary/5">
-            <CardContent className="p-8 text-center space-y-4">
-              <Trophy className="w-12 h-12 text-primary mx-auto" />
-              <h3 className="text-xl font-display font-bold">Community Voting</h3>
-              <p className="text-muted-foreground">
-                Once your healthier version is ready, it will appear in the community gallery 
-                where others can vote and celebrate your transformation!
-              </p>
-            </CardContent>
-          </Card>
+          {generatedImage && generatedRecipe && (
+            <Card className="shadow-warm">
+              <CardHeader>
+                <CardTitle>Your Healthy Transformation</CardTitle>
+                <CardDescription>
+                  AI-generated oil-free version of your dish
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-sm text-muted-foreground">Original Dish</h4>
+                    <img
+                      src={imagePreview}
+                      alt="Original dish"
+                      className="w-full rounded-lg border-2 border-border"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-sm text-muted-foreground">Healthy Version</h4>
+                    <img
+                      src={generatedImage}
+                      alt="Healthy dish"
+                      className="w-full rounded-lg border-2 border-primary"
+                    />
+                  </div>
+                </div>
+                
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-lg">Oil-Free Recipe</h4>
+                  <div className="prose prose-sm max-w-none bg-muted/30 p-4 rounded-lg">
+                    <pre className="whitespace-pre-wrap font-sans text-sm">{generatedRecipe}</pre>
+                  </div>
+                </div>
+
+                <Button 
+                  onClick={() => {
+                    setGeneratedImage(null);
+                    setGeneratedRecipe(null);
+                    setTitle("");
+                    setDescription("");
+                    setImageFile(null);
+                    setImagePreview("");
+                  }}
+                  className="w-full"
+                  variant="outline"
+                >
+                  Transform Another Dish
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
+          {!generatedImage && (
+            <Card className="bg-gradient-to-br from-primary/5 to-secondary/5">
+              <CardContent className="p-8 text-center space-y-4">
+                <Trophy className="w-12 h-12 text-primary mx-auto" />
+                <h3 className="text-xl font-display font-bold">Community Voting</h3>
+                <p className="text-muted-foreground">
+                  Once your healthier version is ready, it will appear in the community gallery 
+                  where others can vote and celebrate your transformation!
+                </p>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </main>
     </div>
