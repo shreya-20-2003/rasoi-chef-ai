@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Mic, Video, MessageCircle } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ArrowLeft, Mic, Video, MessageCircle, Upload, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { useToast } from "@/hooks/use-toast";
@@ -13,6 +14,11 @@ const AiChef = () => {
   const { toast } = useToast();
   const [user, setUser] = useState<User | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isVideoDialogOpen, setIsVideoDialogOpen] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [chefAdvice, setChefAdvice] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     // Check authentication
@@ -37,6 +43,58 @@ const AiChef = () => {
 
   const openChat = () => {
     setIsChatOpen(true);
+  };
+
+  const openVideoDialog = () => {
+    setIsVideoDialogOpen(true);
+    setUploadedImage(null);
+    setChefAdvice(null);
+  };
+
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Invalid file",
+        description: "Please upload an image file",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64Image = reader.result as string;
+      setUploadedImage(base64Image);
+      
+      setIsAnalyzing(true);
+      try {
+        const { data, error } = await supabase.functions.invoke('analyze-cooking-image', {
+          body: { imageData: base64Image }
+        });
+
+        if (error) throw error;
+
+        if (data?.advice) {
+          setChefAdvice(data.advice);
+        } else {
+          throw new Error('No advice received');
+        }
+      } catch (error: any) {
+        console.error('Error analyzing image:', error);
+        toast({
+          title: "Analysis failed",
+          description: error.message || "Failed to analyze the image. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsAnalyzing(false);
+      }
+    };
+
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -83,7 +141,10 @@ const AiChef = () => {
               </CardHeader>
             </Card>
 
-            <Card className="border-2 hover:border-secondary/50 transition-all">
+            <Card 
+              className="border-2 hover:border-secondary/50 transition-all cursor-pointer"
+              onClick={openVideoDialog}
+            >
               <CardHeader>
                 <div className="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center mb-4">
                   <Video className="w-6 h-6 text-secondary" />
@@ -137,6 +198,76 @@ const AiChef = () => {
       </main>
       
       {isChatOpen && <FloatingChat initiallyOpen={true} />}
+
+      <Dialog open={isVideoDialogOpen} onOpenChange={setIsVideoDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Upload Your Dish Photo</DialogTitle>
+            <DialogDescription>
+              Share a photo of your dish and get expert advice from your AI chef
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileSelect}
+              className="hidden"
+            />
+            
+            {!uploadedImage ? (
+              <Button 
+                onClick={() => fileInputRef.current?.click()}
+                className="w-full h-32"
+                variant="outline"
+              >
+                <div className="flex flex-col items-center gap-2">
+                  <Upload className="w-8 h-8" />
+                  <span>Click to upload a photo</span>
+                </div>
+              </Button>
+            ) : (
+              <div className="space-y-4">
+                <img 
+                  src={uploadedImage} 
+                  alt="Uploaded dish" 
+                  className="w-full rounded-lg"
+                />
+                
+                {isAnalyzing ? (
+                  <div className="flex items-center justify-center gap-2 p-4">
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span>Analyzing your dish...</span>
+                  </div>
+                ) : chefAdvice ? (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg">Chef's Advice</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="whitespace-pre-wrap">{chefAdvice}</p>
+                    </CardContent>
+                  </Card>
+                ) : null}
+                
+                <Button 
+                  onClick={() => {
+                    setUploadedImage(null);
+                    setChefAdvice(null);
+                    fileInputRef.current?.click();
+                  }}
+                  variant="outline"
+                  className="w-full"
+                >
+                  Upload Another Photo
+                </Button>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
