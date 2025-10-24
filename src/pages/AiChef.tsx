@@ -6,12 +6,13 @@ import { ArrowLeft, Mic, Video, MessageCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { useToast } from "@/hooks/use-toast";
+import FloatingChat from "@/components/FloatingChat";
 
 const AiChef = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [user, setUser] = useState<User | null>(null);
-  const [isListening, setIsListening] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   useEffect(() => {
     // Check authentication
@@ -34,12 +35,8 @@ const AiChef = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  const startVoiceSession = () => {
-    setIsListening(true);
-    toast({
-      title: "Voice AI Chef",
-      description: "Voice interaction feature coming soon! This will use real-time voice AI for cooking guidance.",
-    });
+  const openChat = () => {
+    setIsChatOpen(true);
   };
 
   return (
@@ -71,7 +68,10 @@ const AiChef = () => {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <Card className="border-2 hover:border-primary/50 transition-all">
+            <Card 
+              className="border-2 hover:border-primary/50 transition-all cursor-pointer" 
+              onClick={openChat}
+            >
               <CardHeader>
                 <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
                   <Mic className="w-6 h-6 text-primary" />
@@ -120,21 +120,23 @@ const AiChef = () => {
           <Card className="shadow-warm">
             <CardContent className="p-12 text-center space-y-6">
               <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto animate-pulse-slow">
-                <Mic className="w-10 h-10 text-primary" />
+                <MessageCircle className="w-10 h-10 text-primary" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-2xl font-display font-bold">Start Cooking with Your AI Chef</h3>
+                <h3 className="text-2xl font-display font-bold">Chat with Your AI Chef</h3>
                 <p className="text-muted-foreground">
-                  Voice and video AI features are being integrated. Stay tuned!
+                  Ask questions like "How to reduce oil consumption?" and get expert advice!
                 </p>
               </div>
-              <Button size="lg" onClick={startVoiceSession} disabled={isListening} className="shadow-warm">
-                {isListening ? "Listening..." : "Start Voice Session"}
+              <Button size="lg" onClick={openChat} className="shadow-warm">
+                Start Chat
               </Button>
             </CardContent>
           </Card>
         </div>
       </main>
+      
+      {isChatOpen && <FloatingChat initiallyOpen={true} />}
     </div>
   );
 };

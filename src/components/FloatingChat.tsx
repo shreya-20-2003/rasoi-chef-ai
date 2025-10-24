@@ -5,8 +5,8 @@ import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-const FloatingChat = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const FloatingChat = ({ initiallyOpen = false }: { initiallyOpen?: boolean }) => {
+  const [isOpen, setIsOpen] = useState(initiallyOpen);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Array<{ role: string; content: string }>>([
     {
